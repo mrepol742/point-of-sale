@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,20 +12,26 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->ulid('ulid')->unique();
+
             $table->string('name');
             $table->string('description')->nullable();
+
+            $table->softDeletes();
             $table->timestamps();
         });
 
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->ulid('ulid')->unique();
+
             $table->string('name');
             $table->string('code')->unique()->nullable();
             $table->string('barcode')->unique();
             $table->string('unit_measurement');
             $table->boolean('is_active')->default(true);
             $table->integer('quantity')->default(0);
-            $table->integer('category_id')->nullable();
+            $table->foreignUlid('category_ulid')->constrained('categories', 'ulid');
             $table->integer('age_restriction')->nullable();
             $table->text('description')->nullable();
             $table->double('taxes')->default(0);
@@ -35,6 +40,8 @@ return new class extends Migration
             $table->double('sale_price')->default(0);
             $table->string('color')->nullable();
             $table->text('image')->nullable();
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

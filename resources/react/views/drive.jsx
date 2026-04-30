@@ -163,7 +163,7 @@ const Drive = () => {
                                     >
                                         <button
                                             onClick={() =>
-                                                window.open(`/api/files/${file.id}`, '_blank')
+                                                window.open(`/api/files/${file.ulid}`, '_blank')
                                             }
                                             title="Download"
                                             className="position-absolute bg-primary text-white border-0 rounded"

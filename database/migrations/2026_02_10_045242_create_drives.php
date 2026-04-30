@@ -12,11 +12,15 @@ return new class extends Migration {
     {
         Schema::create('drives', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->ulid('ulid')->unique();
+            $table->foreignUlid('user_ulid')->constrained('users', 'ulid');
+
             $table->string('file_name');
             $table->string('file_path');
             $table->unsignedBigInteger('file_size');
             $table->string('file_type');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

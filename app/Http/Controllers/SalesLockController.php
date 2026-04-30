@@ -3,10 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\SaleLock;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreSalesLockRequest;
 
@@ -19,7 +15,7 @@ class SalesLockController extends ApiController
      */
     public function index(): JsonResponse
     {
-        $salesLock = SaleLock::where('cashier_id', Auth::user()->id)
+        $salesLock = SaleLock::where('cashier_ulid', auth()->user()->ulid)
             ->orderBy('created_at', 'desc')
             ->firstOrFail();
 
@@ -29,13 +25,13 @@ class SalesLockController extends ApiController
     /**
      * Get a specific sales lock for the authenticated cashier.
      *
-     * @param int $id The ID of the sales lock to be retrieved.
+     * @param int $ulid The ULID of the sales lock to be retrieved.
      * @return JsonResponse A JSON response containing the products in the specified sales lock, or an error message if the lock is not found.
      */
-    public function show($id): JsonResponse
+    public function show($ulid): JsonResponse
     {
-        $salesLock = SaleLock::where('cashier_id', Auth::user()->id)
-            ->where('id', $id)
+        $salesLock = SaleLock::where('cashier_ulid', auth()->user()->ulid)
+            ->where('ulid', $ulid)
             ->firstOrFail();
 
         return $this->success($salesLock->products, 'Sales lock retrieved successfully');
@@ -52,7 +48,7 @@ class SalesLockController extends ApiController
         $validated = $request->validated();
 
         $salesLock = SaleLock::updateOrCreate(
-            ['cashier_id' => Auth::user()->id],
+            ['cashier_ulid' => auth()->user()->ulid],
             ['products' => $validated['products']],
         );
 
@@ -67,7 +63,7 @@ class SalesLockController extends ApiController
      */
     public function destroy($id): JsonResponse
     {
-        $salesLock = SaleLock::where('cashier_id', Auth::user()->id)
+        $salesLock = SaleLock::where('cashier_ulid', auth()->user()->ulid)
             ->where('id', $id)
             ->firstOrFail();
 

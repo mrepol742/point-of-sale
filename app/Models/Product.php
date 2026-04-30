@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 class Product extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use SoftDeletes, HasFactory, Notifiable;
 
      /**
      * The attributes that are mass assignable.
@@ -23,7 +22,7 @@ class Product extends Model
         'unit_measurement',
         'is_active',
         'quantity',
-        'category_id',
+        'category_ulid',
         'age_restriction',
         'description',
         'taxes',
@@ -39,6 +38,6 @@ class Product extends Model
      */
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_ulid', 'ulid')->withTrashed();
     }
 }

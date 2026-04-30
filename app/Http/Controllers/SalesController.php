@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Sale;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\JsonResponse;
-use Laravel\Pail\Contracts\Printer;
 
 class SalesController extends ApiController
 {
@@ -33,7 +31,7 @@ class SalesController extends ApiController
      */
     public function getTodaysSales(Request $request): JsonResponse
     {
-        $sales = Sale::where('cashier_id', Auth::user()->id)
+        $sales = Sale::where('cashier_ulid', auth()->user()->ulid)
             ->whereDate('created_at', now()->format('Y-m-d'))
             ->orderBy('id', 'desc');
         $itemCount = Cache::remember(
@@ -71,7 +69,7 @@ class SalesController extends ApiController
                 'mode_of_payment' => $request->input('mode_of_payment'),
                 'reference_number' => time(),
             ];
-            $sale = Sale::create(['cashier_id' => Auth::user()->id, ...$data]);
+            $sale = Sale::create(['cashier_ulid' => auth()->user()->ulid, ...$data]);
             return response()->json([
                 'message' => 'Checkout successful',
                 'business' => [
@@ -84,8 +82,8 @@ class SalesController extends ApiController
                     'vat_id' => config('business.vat_id'),
                 ],
                 'receipt' => [
-                    'id' => str_pad($sale->id, 12, '0', STR_PAD_LEFT),
-                    'cashier' => Auth::user(),
+                    'ulid' => str_pad($sale->ulid, 12, '0', STR_PAD_LEFT),
+                    'cashier' => auth()->user(),
                     'date_of_sale' => $sale->created_at->format('Y-m-d H:i:s'),
                     ...$data,
                 ],

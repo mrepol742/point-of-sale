@@ -30,10 +30,8 @@ class UserSeeder extends Seeder
 
         foreach ($users as $user) {
             User::factory()->create([
-                'name' => fake()->name(),
                 'email' => $user['email'],
-                'phone' => fake()->phoneNumber(),
-                'address' => fake()->address(),
+                'status' => 'active',
                 'username' => $user['role'],
                 'role' => $user['role'],
                 'password' => bcrypt($user['role']),

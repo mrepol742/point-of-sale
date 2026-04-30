@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
@@ -19,6 +21,8 @@ class ProductSeeder extends Seeder
 
         for ($i = 0; $i < $total; $i++) {
             $products[] = [
+                'ulid' => (string) Str::ulid(),
+                'category_ulid' => Category::inRandomOrder()->value('ulid'),
                 'barcode' => fake()->ean13(),
                 'unit_measurement' => fake()->word(),
                 'name' => fake()->word(),
@@ -26,8 +30,6 @@ class ProductSeeder extends Seeder
                 'cost_price' => rand(1, 100),
                 'markup' => rand(1, 100),
                 'sale_price' => rand(1, 100),
-                'created_at' => now(),
-                'updated_at' => now(),
             ];
 
             if (count($products) === $batchSize) {

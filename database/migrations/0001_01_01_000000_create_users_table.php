@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,6 +12,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->ulid('ulid')->unique();
+
             $table->string('name');
             $table->string('username')->unique();
             $table->string('email')->unique();
@@ -23,6 +24,19 @@ return new class extends Migration
             $table->string('role')->default('cashier');
             $table->string('status')->default('active');
             $table->rememberToken();
+
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->ulid('ulid')->unique();
+
+            $table->string('name');
+            $table->string('description');
+
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -48,6 +62,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('roles');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

@@ -2,14 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class SaleLock extends Model
 {
-    protected $table = 'sales_lock';
-
     protected $fillable = [
-        'cashier_id',
+        'cashier_ulid',
         'products',
     ];
 
@@ -22,6 +18,6 @@ class SaleLock extends Model
      */
     public function cashier()
     {
-        return $this->belongsTo(User::class, 'cashier_id', 'id');
+        return $this->belongsTo(User::class, 'cashier_ulid', 'ulid');
     }
 }

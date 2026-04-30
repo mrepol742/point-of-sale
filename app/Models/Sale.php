@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 class Sale extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use SoftDeletes, HasFactory, Notifiable;
 
      /**
      * The attributes that are mass assignable.
@@ -17,8 +16,9 @@ class Sale extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'cashier_id',
+        'cashier_ulid',
         'products',
+        'discount',
         'total',
         'total_items',
         'total_discount',
@@ -32,12 +32,12 @@ class Sale extends Model
     protected $casts = [
         'products' => 'json',
     ];
-    
+
     /**
      * Get the cashier associated with the sale.
      */
     public function cashier()
     {
-        return $this->belongsTo(User::class, 'cashier_id', 'id');
+        return $this->belongsTo(User::class, 'cashier_ulid', 'ulid')->withTrashed();
     }
 }

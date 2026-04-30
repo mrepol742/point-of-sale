@@ -23,7 +23,7 @@ class StoreSalesLockRequest extends FormRequest
     {
         return [
             'products' => 'nullable|array',
-            'products.*.id' => 'required|integer|exists:products,id',
+            'products.*.ulid' => 'required|integer|exists:products,ulid',
         ];
     }
 }

@@ -40,7 +40,7 @@ const Product = ({ product, setProduct, onCancel, fetchProducts, setShowAppModal
         const { id, value } = e.target
         setProduct((prevProduct) => ({
             ...prevProduct,
-            [id]: id === 'category_id' ? parseInt(value) : value,
+            [id]: value,
         }))
     }
 
@@ -56,7 +56,7 @@ const Product = ({ product, setProduct, onCancel, fetchProducts, setShowAppModal
                         code: '',
                         barcode: '',
                         unit_measurement: '',
-                        category_id: 0,
+                        category_ulid: 0,
                         is_active: true,
                         default_quantity: true,
                         age_restriction: 0,
@@ -86,7 +86,7 @@ const Product = ({ product, setProduct, onCancel, fetchProducts, setShowAppModal
                     code: '',
                     barcode: '',
                     unit_measurement: '',
-                    category_id: 0,
+                    category_ulid: 0,
                     is_active: true,
                     default_quantity: true,
                     age_restriction: 0,
@@ -193,15 +193,15 @@ const Product = ({ product, setProduct, onCancel, fetchProducts, setShowAppModal
                 </CCol>
                 <CCol xs={12} md={6}>
                     <CFormSelect
-                        id="category_id"
+                        id="category_ulid"
                         floatingClassName="mb-3"
                         floatingLabel="Category"
                         onChange={handleSelectChange}
-                        value={product.category_id}
+                        value={product.category_ulid}
                         options={[
                             ...categories.map((g) => ({
                                 label: g.name,
-                                value: g.id,
+                                value: g.ulid,
                             })),
                         ]}
                     />
@@ -342,7 +342,7 @@ Product.propTypes = {
         code: PropTypes.string,
         barcode: PropTypes.string,
         unit_measurement: PropTypes.string,
-        category_id: PropTypes.number,
+        category_ulid: PropTypes.number,
         is_active: PropTypes.bool,
         default_quantity: PropTypes.bool,
         age_restriction: PropTypes.number,

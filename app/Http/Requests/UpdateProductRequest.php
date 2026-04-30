@@ -31,7 +31,7 @@ class UpdateProductRequest extends FormRequest
             'unit_measurement' => 'sometimes|required|string|max:255',
             'is_active' => 'sometimes|boolean',
             'default_quantity' => 'sometimes|boolean',
-            'category_id' => 'nullable|integer|exists:categories,id',
+            'category_ulid' => 'nullable|integer|exists:categories,ulid,deleted_at,NULL',
             'age_restriction' => 'nullable|integer|min:0',
             'description' => 'nullable|string',
             'taxes' => 'nullable|integer|min:0',

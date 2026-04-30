@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreDriveRequest;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DriveController extends ApiController
 {
@@ -32,12 +33,14 @@ class DriveController extends ApiController
     /**
      * Download a file by ID.
      *
-     * @param int $id The ID of the file to be downloaded.
-     * @return JsonResponse A JSON response containing the file download or an error message if the file is not found.
+     * @param int $ulid The ULID of the file to be downloaded.
+     * @return StreamedResponse A streamed response that initiates the file download, or an error response if the file is not found.
      */
-    public function show(Drive $drive): JsonResponse
+    public function show($ulid): StreamedResponse
     {
-        if (!Storage::disk('private')->exists($drive->file_path)) {
+        $drive = Drive::where('ulid', $ulid)->first();
+
+        if (!$drive) {
             return $this->error('File not found', 404);
         }
 
@@ -57,7 +60,7 @@ class DriveController extends ApiController
         $file = $request->file('file');
         $fileName = $file->getClientOriginalName();
 
-        $exists = Drive::where('user_id', $request->user()->id)
+        $exists = Drive::where('user_ulid', auth()->user()->ulid)
             ->where('file_name', $fileName)
             ->exists();
 
@@ -70,7 +73,7 @@ class DriveController extends ApiController
         $fileType = $file->getClientMimeType();
 
         $drive = Drive::create([
-            'user_id' => $request->user()->id,
+            'user_ulid' => auth()->user()->ulid,
             'file_name' => $fileName,
             'file_path' => $filePath,
             'file_size' => $fileSize,

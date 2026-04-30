@@ -57,11 +57,12 @@ class UserController extends ApiController
     /**
      * Remove the specified user from storage.
      *
+     * @param int $ulid The ULID of the user to be deleted.
      * @return JsonResponse The JSON response indicating the success or failure of the user deletion process, along with any relevant messages or errors.
      */
-    public function delete($id): JsonResponse
+    public function delete($ulid): JsonResponse
     {
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($ulid);
         $user->delete();
 
         return $this->success($user, 'User deleted successfully.');
