@@ -19,12 +19,12 @@ class UserSeeder extends Seeder
                 'role' => 'cashier',
             ],
             [
-                'email' => 'admin@example.com',
-                'role' => 'admin',
+                'email' => 'production@example.com',
+                'role' => 'production',
             ],
             [
-                'email' => 'super_admin@example.com',
-                'role' => 'super_admin',
+                'email' => 'admin@example.com',
+                'role' => 'admin',
             ],
         ];
 

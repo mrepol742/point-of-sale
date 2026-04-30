@@ -17,7 +17,7 @@ const DefaultLayout = () => {
             </div>
         )
 
-    if (['super_admin', 'admin'].includes(user.role))
+    if (user.role === 'admin')
         return (
             <div>
                 <AppSidebar />

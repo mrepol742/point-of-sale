@@ -8,7 +8,6 @@ use App\Http\Controllers\DriveController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\SalesLockController;
 use App\Http\Controllers\Cashier\PosController;
@@ -37,7 +36,6 @@ Route::middleware(['verify.session:cashier'])->group(function () {
 Route::middleware(['verify.session:admin,super_admin'])->group(function () {
     Route::apiResource('/categories', CategoryController::class);
     Route::apiResource('/products', ProductController::class);
-    Route::apiResource('/roles', RoleController::class);
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/files', DriveController::class);
     Route::apiResource('/logs', LogController::class);

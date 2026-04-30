@@ -24,14 +24,18 @@ const Users = () => {
     const navigate = useNavigate()
     const [users, setUsers] = useState([])
     const [user, setUser] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        address: '',
+        first_name: '',
+        last_name: '',
+        prefix: '',
+        suffix: '',
         username: '',
         password: '',
-        status: '',
+        email: '',
+        gender: '',
+        phone_number: '',
+        address: '',
         role: '',
+        status: '',
         type: 'add',
     })
     const [currentPage, setCurrentPage] = useState(1)
@@ -72,14 +76,18 @@ const Users = () => {
 
     const handleAdd = () => {
         setUser({
-            name: '',
-            email: '',
-            phone: '',
-            address: '',
+            first_name: '',
+            last_name: '',
+            prefix: '',
+            suffix: '',
             username: '',
             password: '',
-            status: '',
+            email: '',
+            gender: '',
+            phone_number: '',
+            address: '',
             role: '',
+            status: '',
             type: 'add',
         })
         setShowAppModal(true)
@@ -150,11 +158,23 @@ const Users = () => {
                     <CTable striped bordered hover responsive>
                         <CTableHead>
                             <CTableRow>
-                                <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                                <CTableHeaderCell scope="col">Prefix</CTableHeaderCell>
+                                <CTableHeaderCell scope="col" className="text-nowrap">
+                                    First Name
+                                </CTableHeaderCell>
+                                <CTableHeaderCell scope="col" className="text-nowrap">
+                                    Last Name
+                                </CTableHeaderCell>
+                                <CTableHeaderCell scope="col">Suffix</CTableHeaderCell>
                                 <CTableHeaderCell scope="col">Username</CTableHeaderCell>
+                                <CTableHeaderCell scope="col">Gender</CTableHeaderCell>
+                                <CTableHeaderCell scope="col">Birthdate</CTableHeaderCell>
                                 <CTableHeaderCell scope="col">Role</CTableHeaderCell>
                                 <CTableHeaderCell scope="col">Email</CTableHeaderCell>
-                                <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
+                                <CTableHeaderCell scope="col" className="text-nowrap">
+                                    Phone Number
+                                </CTableHeaderCell>
+                                <CTableHeaderCell scope="col">Address</CTableHeaderCell>
                                 <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                                 <CTableHeaderCell scope="col"></CTableHeaderCell>
                             </CTableRow>
@@ -162,11 +182,17 @@ const Users = () => {
                         <CTableBody>
                             {users.map((user, index) => (
                                 <CTableRow key={user.id}>
-                                    <CTableDataCell>{user.name}</CTableDataCell>
+                                    <CTableDataCell>{user.prefix}</CTableDataCell>
+                                    <CTableDataCell>{user.first_name}</CTableDataCell>
+                                    <CTableDataCell>{user.last_name}</CTableDataCell>
+                                    <CTableDataCell>{user.suffix}</CTableDataCell>
                                     <CTableDataCell>{user.username}</CTableDataCell>
+                                    <CTableDataCell>{user.gender}</CTableDataCell>
+                                    <CTableDataCell>{user.date_of_birth}</CTableDataCell>
                                     <CTableDataCell>{user.role}</CTableDataCell>
                                     <CTableDataCell>{user.email}</CTableDataCell>
-                                    <CTableDataCell>{user.phone}</CTableDataCell>
+                                    <CTableDataCell>{user.phone_number}</CTableDataCell>
+                                    <CTableDataCell>{user.address}</CTableDataCell>
                                     <CTableDataCell>{user.status}</CTableDataCell>
                                     <CTableDataCell>
                                         <div className="d-flex">

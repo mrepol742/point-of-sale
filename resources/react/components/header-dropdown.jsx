@@ -33,7 +33,7 @@ const AppHeaderDropdown = () => {
                     className="rounded-pill bg-primary d-flex align-items-center justify-content-center"
                     style={{ width: '40px', height: '40px', color: 'white' }}
                 >
-                    {getInitials(user.name)}
+                    {getInitials(user.first_name)}
                 </div>
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
@@ -42,11 +42,12 @@ const AppHeaderDropdown = () => {
                         className="rounded-pill bg-primary d-flex align-items-center justify-content-center me-2 fs-6"
                         style={{ width: '40px', height: '40px', color: 'white' }}
                     >
-                        {getInitials(user.name)}
+                        {getInitials(user.first_name)}
                     </div>
                     <div>
                         <span className="d-block text-truncate" style={{ maxWidth: '250px' }}>
-                            {user.name}
+                            {user.first_name} {user.last_name}
+                            {user.suffix ? `, ${user.suffix}` : ''}
                         </span>
                         <span className="d-block text-truncate" style={{ maxWidth: '250px' }}>
                             {user.email}

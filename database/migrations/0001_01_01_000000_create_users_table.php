@@ -14,27 +14,21 @@ return new class extends Migration {
             $table->id();
             $table->ulid('ulid')->unique();
 
-            $table->string('name');
-            $table->string('username')->unique();
+            $table->string('first_name', 125);
+            $table->string('last_name', 125);
+            $table->string('prefix', 10)->nullable();
+            $table->string('suffix', 10)->nullable();
+            $table->string('username', 30)->unique();
             $table->string('email')->unique();
-            $table->string('phone')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->date('date_of_birth')->nullable();
             $table->string('address')->nullable();
+            $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('role')->default('cashier');
-            $table->string('status')->default('active');
+            $table->enum('role', ['admin', 'cashier', 'production'])->default('cashier');
+            $table->enum('status', ['active', 'inactive', 'suspended'])->default('active');
             $table->rememberToken();
-
-            $table->softDeletes();
-            $table->timestamps();
-        });
-
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->ulid('ulid')->unique();
-
-            $table->string('name');
-            $table->string('description');
 
             $table->softDeletes();
             $table->timestamps();
@@ -62,7 +56,6 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('roles');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

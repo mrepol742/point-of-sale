@@ -62,68 +62,94 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false)
 
     return (
-        <div
-            className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center"
-            style={{ position: 'relative' }}
-        >
-            <CContainer style={{ position: 'relative', zIndex: 3 }}>
-                <CRow className="justify-content-center">
-                    <CCol md={7} lg={5} xl={4}>
-                        <CCard className="p-4 border-0 rounded-4 shadow">
-                            <CCardBody>
-                                <CForm onSubmit={handleLogin}>
-                                    <h2>Point of Sale</h2>
-                                    <p className="text-body-secondary">
-                                        Sign in to continue to your account
+        <div className="min-vh-100 d-flex align-items-center">
+            <CContainer>
+                <CRow className="justify-content-center align-items-center">
+                    <CCol md={6} lg={5} className="d-none d-md-block">
+                        <div className="pe-5">
+                            <h2 className="fw-semibold mb-3">Point of Sale System</h2>
+
+                            <p className="mb-4">
+                                Secure access to your business operations, inventory, and reporting
+                                dashboard.
+                            </p>
+
+                            <div className="border-start border-4 ps-3">
+                                <p className="mb-2">Role-based access control</p>
+                                <p className="mb-2">Audit-ready transactions</p>
+                                <p className="mb-0">
+                                    Centralized business management
+                                </p>
+                            </div>
+
+                            <div className="mt-5 small text-muted">
+                                © {new Date().getFullYear()} . All rights reserved.
+                            </div>
+                        </div>
+                    </CCol>
+
+                    <CCol xs={12} md={6} lg={4}>
+                        <CCard className="border-0 shadow-sm">
+                            <CCardBody className="p-4 p-md-5">
+                                <div className="mb-4">
+                                    <h4 className="fw-semibold mb-1">Sign in</h4>
+                                    <p className="text-muted mb-0 small">
+                                        Enter your credentials to continue
                                     </p>
-                                    <CInputGroup className="mb-3 border rounded">
-                                        <CInputGroupText className="border-0">
-                                            <CIcon icon={cilUser} />
-                                        </CInputGroupText>
-                                        <CFormInput
-                                            className="border-0"
-                                            onChange={handleChange}
-                                            value={formData.login}
-                                            type="email"
-                                            name="login"
-                                            placeholder="Username or Email"
-                                        />
-                                    </CInputGroup>
-                                    <CInputGroup className="mb-4 border rounded">
-                                        <CInputGroupText className="border-0">
-                                            <CIcon icon={cilLockLocked} />
-                                        </CInputGroupText>
-                                        <CFormInput
-                                            onChange={handleChange}
-                                            className="border-0"
-                                            value={formData.password}
-                                            name="password"
-                                            type={showPassword ? 'text' : 'password'}
-                                            placeholder="Password"
-                                        />
-                                        <CInputGroupText
-                                            className="border-0"
-                                            style={{ cursor: 'pointer' }}
-                                            onClick={() => setShowPassword((prev) => !prev)}
-                                        >
-                                            {showPassword ? (
-                                                <span role="img" aria-label="Hide password">
-                                                    <FontAwesomeIcon icon={faEyeSlash} />
-                                                </span>
-                                            ) : (
-                                                <span role="img" aria-label="Show password">
-                                                    <FontAwesomeIcon icon={faEye} />
-                                                </span>
-                                            )}
-                                        </CInputGroupText>
-                                    </CInputGroup>
-                                    <CRow>
-                                        <CCol xs={6}>
-                                            <CButton color="primary" className="px-4" type="submit">
-                                                Login
-                                            </CButton>
-                                        </CCol>
-                                    </CRow>
+                                </div>
+
+                                <CForm onSubmit={handleLogin}>
+                                    <div className="mb-3">
+                                        <label className="form-label small text-muted">
+                                            Email address
+                                        </label>
+                                        <CInputGroup>
+                                            <CInputGroupText>
+                                                <CIcon icon={cilUser} />
+                                            </CInputGroupText>
+                                            <CFormInput
+                                                value={formData.login}
+                                                onChange={handleChange}
+                                                name="login"
+                                                type="email"
+                                                placeholder="user@company.com"
+                                                className="shadow-none"
+                                            />
+                                        </CInputGroup>
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <label className="form-label small text-muted">
+                                            Password
+                                        </label>
+                                        <CInputGroup>
+                                            <CInputGroupText>
+                                                <CIcon icon={cilLockLocked} />
+                                            </CInputGroupText>
+
+                                            <CFormInput
+                                                value={formData.password}
+                                                onChange={handleChange}
+                                                name="password"
+                                                type={showPassword ? 'text' : 'password'}
+                                                placeholder="••••••••"
+                                                className="shadow-none"
+                                            />
+
+                                            <CInputGroupText
+                                                style={{ cursor: 'pointer' }}
+                                                onClick={() => setShowPassword((prev) => !prev)}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={showPassword ? faEyeSlash : faEye}
+                                                />
+                                            </CInputGroupText>
+                                        </CInputGroup>
+                                    </div>
+
+                                    <CButton type="submit" color="primary" className="w-100 py-2">
+                                        Sign in
+                                    </CButton>
                                 </CForm>
                             </CCardBody>
                         </CCard>

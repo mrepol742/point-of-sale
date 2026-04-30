@@ -19,9 +19,14 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'prefix',
+        'suffix',
         'email',
-        'phone',
+        'phone_number',
+        'date_of_birth',
+        'gender',
         'address',
         'username',
         'role',
@@ -72,16 +77,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user is Super Admin
-     *
-     * @return bool
-     */
-    public function isSuperAdmin(): bool
-    {
-        return $this->role === 'super_admin';
-    }
-
-    /**
      * Check if the user is Admin
      *
      * @return bool
@@ -99,5 +94,15 @@ class User extends Authenticatable
     public function isCashier(): bool
     {
         return $this->role === 'cashier';
+    }
+
+    /**
+     * Check if the user is Production
+     *
+     * @return bool
+     */
+    public function isProduction(): bool
+    {
+        return $this->role === 'production';
     }
 }

@@ -19,6 +19,10 @@ const _nav = [
         icon: <FontAwesomeIcon icon={faChartSimple} className="nav-icon" />,
     },
     {
+        component: CNavTitle,
+        name: 'POS',
+    },
+    {
         component: CNavItem,
         name: 'Products',
         to: '/products',
@@ -37,6 +41,10 @@ const _nav = [
         icon: <FontAwesomeIcon icon={faCartShopping} className="nav-icon" />,
     },
     {
+        component: CNavTitle,
+        name: 'Admin',
+    },
+    {
         component: CNavItem,
         name: 'Drive',
         to: '/drive',
@@ -53,6 +61,10 @@ const _nav = [
         name: 'Settings',
         to: '/settings',
         icon: <FontAwesomeIcon icon={faGear} className="nav-icon" />,
+    },
+    {
+        component: CNavTitle,
+        name: 'Misc',
     },
     {
         component: CNavItem,

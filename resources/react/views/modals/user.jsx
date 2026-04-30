@@ -44,14 +44,18 @@ const NewUser = ({ user, setUser, onCancel, fetchUsers, setShowAppModal }) => {
                 .then((response) => {
                     toast.success(`${user.name} created successfully`)
                     setUser({
-                        name: '',
-                        email: '',
-                        phone: '',
-                        address: '',
+                        first_name: '',
+                        last_name: '',
+                        prefix: '',
+                        suffix: '',
                         username: '',
                         password: '',
-                        status: '',
+                        email: '',
+                        gender: '',
+                        phone_number: '',
+                        address: '',
                         role: '',
+                        status: '',
                         type: 'add',
                     })
                     fetchUsers(0)
@@ -68,14 +72,18 @@ const NewUser = ({ user, setUser, onCancel, fetchUsers, setShowAppModal }) => {
                 if (response.data.error) return toast.error(response.data.error)
                 toast.success(`${user.name} updated successfully`)
                 setUser({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    address: '',
+                    first_name: '',
+                    last_name: '',
+                    prefix: '',
+                    suffix: '',
                     username: '',
                     password: '',
-                    status: '',
+                    email: '',
+                    gender: '',
+                    phone_number: '',
+                    address: '',
                     role: '',
+                    status: '',
                     type: 'add',
                 })
                 fetchUsers(0)
@@ -87,18 +95,9 @@ const NewUser = ({ user, setUser, onCancel, fetchUsers, setShowAppModal }) => {
             })
     }
 
-    const fetchData = async () => {
-        const [fetchRoles] = await Promise.all([axiosInstance.get('/roles')])
-        setRoles(fetchRoles.data.data)
-    }
-
     const toCapitalize = (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
     }
-
-    useEffect(() => {
-        fetchData()
-    }, [])
 
     return (
         <CForm onSubmit={handleSubmit} className="p-2">
@@ -110,13 +109,55 @@ const NewUser = ({ user, setUser, onCancel, fetchUsers, setShowAppModal }) => {
                 <CCol xs={12} md={6}>
                     <CFormInput
                         type="text"
-                        id="name"
+                        id="first_name"
                         floatingClassName="mb-3"
-                        floatingLabel="Name"
+                        floatingLabel="First Name"
                         onChange={handleChange}
-                        value={user.name}
+                        value={user.first_name}
                         placeholder=""
                         required
+                    />
+                </CCol>
+                <CCol xs={12} md={6}>
+                    <CFormInput
+                        type="text"
+                        id="last_name"
+                        floatingClassName="mb-3"
+                        floatingLabel="Last Name"
+                        onChange={handleChange}
+                        value={user.last_name}
+                        placeholder=""
+                        required
+                    />
+                </CCol>
+            </CRow>
+            <CRow>
+                <CCol xs={12} md={6}>
+                    <CFormSelect
+                        id="prefix"
+                        floatingClassName="mb-3"
+                        floatingLabel="Prefix"
+                        onChange={handleSelectChange}
+                        value={user.prefix}
+                        options={[
+                            { label: 'Select a prefix', value: '' },
+                            { label: 'Mr.', value: 'mr' },
+                            { label: 'Ms.', value: 'ms' },
+                            { label: 'Mrs.', value: 'mrs' },
+                            { label: 'Dr.', value: 'dr' },
+                        ]}
+                        required
+                    />
+                </CCol>
+                <CCol xs={12} md={6}>
+                    <CFormInput
+                        type="suffix"
+                        id="suffix"
+                        floatingClassName="mb-3"
+                        floatingLabel="Suffix (Optional)"
+                        onChange={handleChange}
+                        value={user.suffix}
+                        placeholder=""
                     />
                 </CCol>
             </CRow>
@@ -136,11 +177,11 @@ const NewUser = ({ user, setUser, onCancel, fetchUsers, setShowAppModal }) => {
                 <CCol xs={12} md={6}>
                     <CFormInput
                         type="text"
-                        id="phone"
+                        id="phone_number"
                         floatingClassName="mb-3"
-                        floatingLabel="Phone"
+                        floatingLabel="Phone Number"
                         onChange={handleChange}
-                        value={user.phone}
+                        value={user.phone_number}
                         placeholder=""
                         required
                     />
@@ -168,10 +209,9 @@ const NewUser = ({ user, setUser, onCancel, fetchUsers, setShowAppModal }) => {
                         value={user.role}
                         options={[
                             { label: 'Select a role', value: '' },
-                            ...roles.map((d) => ({
-                                label: toCapitalize(d.name.replace(/_/g, ' ')),
-                                value: d.name,
-                            })),
+                            { label: 'Admin', value: 'admin' },
+                            { label: 'Cashier', value: 'cashier' },
+                            { label: 'Production', value: 'production' },
                         ]}
                         required
                     />
