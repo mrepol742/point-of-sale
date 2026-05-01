@@ -22,7 +22,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 const Login = () => {
     const [formData, setFormData] = useState({
-        login: '',
+        email: '',
         password: '',
     })
 
@@ -36,6 +36,7 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault()
+
         const response = new Promise(async (resolve, reject) => {
             try {
                 const res = await axiosInstance.post('/auth/login', formData)
@@ -67,7 +68,7 @@ const Login = () => {
                 <CRow className="justify-content-center align-items-center">
                     <CCol md={6} lg={5} className="d-none d-md-block">
                         <div className="pe-5">
-                            <h2 className="fw-semibold mb-3">Point of Sale System</h2>
+                            <h2 className="fw-semibold mb-3">{import.meta.env.VITE_APP_NAME}</h2>
 
                             <p className="mb-4">
                                 Secure access to your business operations, inventory, and reporting
@@ -76,14 +77,13 @@ const Login = () => {
 
                             <div className="border-start border-4 ps-3">
                                 <p className="mb-2">Role-based access control</p>
-                                <p className="mb-2">Audit-ready transactions</p>
-                                <p className="mb-0">
-                                    Centralized business management
-                                </p>
+                                <p className="mb-2">File sharing and collaboration</p>
+                                <p className="mb-2">High Performance and Scalability</p>
                             </div>
 
                             <div className="mt-5 small text-muted">
-                                © {new Date().getFullYear()} . All rights reserved.
+                                © {new Date().getFullYear()} {import.meta.env.VITE_APP_NAME}. All
+                                rights reserved.
                             </div>
                         </div>
                     </CCol>
@@ -101,19 +101,20 @@ const Login = () => {
                                 <CForm onSubmit={handleLogin}>
                                     <div className="mb-3">
                                         <label className="form-label small text-muted">
-                                            Email address
+                                            Email
                                         </label>
                                         <CInputGroup>
                                             <CInputGroupText>
                                                 <CIcon icon={cilUser} />
                                             </CInputGroupText>
                                             <CFormInput
-                                                value={formData.login}
+                                                value={formData.email}
                                                 onChange={handleChange}
-                                                name="login"
+                                                name="email"
                                                 type="email"
                                                 placeholder="user@company.com"
                                                 className="shadow-none"
+                                                required
                                             />
                                         </CInputGroup>
                                     </div>
@@ -134,6 +135,7 @@ const Login = () => {
                                                 type={showPassword ? 'text' : 'password'}
                                                 placeholder="••••••••"
                                                 className="shadow-none"
+                                                required
                                             />
 
                                             <CInputGroupText

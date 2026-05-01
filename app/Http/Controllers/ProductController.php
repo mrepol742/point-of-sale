@@ -24,7 +24,7 @@ class ProductController extends ApiController
         $query = Product::query();
 
         if ($request->has('search')) {
-            $input = $request->search;
+            $input = $request->input('search');
 
             $query->where(function ($q) use ($input) {
                 $q->where('name', 'LIKE', "%{$input}%")

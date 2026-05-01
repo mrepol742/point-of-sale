@@ -64,12 +64,12 @@ const Search = ({ data }) => {
         if (query.trim() === '') return
         setLoading(true)
         axiosInstance
-            .post('/products/search', { query })
+            .get('/pos', { search: query })
             .then((response) => {
                 if (response.data.error) return toast.error(response.data.error)
-                setFormData(response.data.data)
-                setCurrentPage(response.data.currentPage)
-                setTotalPages(response.data.totalPages)
+                setFormData(response.data.data.data)
+                setCurrentPage(response.data.data.currentPage)
+                setTotalPages(response.data.data.totalPages)
             })
             .catch((error) => {
                 console.error('Error to search products:', error)

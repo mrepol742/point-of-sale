@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->string('last_name', 125);
             $table->string('prefix', 10)->nullable();
             $table->string('suffix', 10)->nullable();
-            $table->string('username', 30)->unique();
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
             $table->date('date_of_birth')->nullable();

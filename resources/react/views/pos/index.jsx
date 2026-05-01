@@ -19,7 +19,7 @@ import {
     CImage,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDownLong, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { faDownLong, faMagnifyingGlass, faBars } from '@fortawesome/free-solid-svg-icons'
 import { toast } from 'react-toastify'
 import DeleteModal from './modal/delete'
 import QuantityModal from './modal/quantity'
@@ -55,6 +55,7 @@ const PointOfSale = () => {
     const [showBanner, setShowBanner] = useState(false)
     const [popupMenu, setPopupMenu] = useState('')
     const [showPopupMenu, setShowPopupMenu] = useState(false)
+    const [showRightPaneMobile, setShowRightPaneMobile] = useState(false)
     const inputRef = useRef(null)
 
     const addProduct = (product) => {
@@ -255,10 +256,19 @@ const PointOfSale = () => {
         }
     }, [])
 
+    // close mobile overlay with Escape
+    useEffect(() => {
+        const esc = (e) => {
+            if (e.key === 'Escape') setShowRightPaneMobile(false)
+        }
+        window.addEventListener('keydown', esc)
+        return () => window.removeEventListener('keydown', esc)
+    }, [])
+
     const handleSearch = (event) => {
         if (salesLock) return toast.error('Sales locked')
         const query = event.target.value
-        if (query.includes(' ')) {
+        if (query.includes(' ') || query.length == 0) {
             setSearchQuery(query)
             return setShowSearchModal(true)
         }
@@ -349,22 +359,6 @@ const PointOfSale = () => {
 
     const handleSearchInput = (event) => {
         setSearchQuery(event.target.value)
-
-        // if (event.target.value.length > 0) {
-        //     const currentTime = new Date().getTime()
-        //     if (!event.target.lastInputTime) {
-        //         event.target.lastInputTime = currentTime
-        //     } else {
-        //         const timeDifference = currentTime - event.target.lastInputTime
-        //         event.target.lastInputTime = currentTime
-        //         console.log(timeDifference + 'ms')
-        //         if (timeDifference > 1000) {
-        //             handleSearch(event)
-        //             event.target.value = ''
-        //             setSearchQuery('')
-        //         }
-        //     }
-        // }
     }
 
     if (salesLock === null)
@@ -416,9 +410,11 @@ const PointOfSale = () => {
                     textAlign: 'center',
                 }}
             >
-                <span style={{ fontSize: '4vw', fontWeight: 700, opacity: 0.08 }}>Point of Sale</span>
+                <span style={{ fontSize: '4vw', fontWeight: 700, opacity: 0.08 }}>
+                    {import.meta.env.VITE_APP_NAME}
+                </span>
                 <span className="d-block" style={{ opacity: 0.2 }}>
-                    www.melvinjonesrepol.com
+                    {import.meta.env.VITE_APP_URL}
                 </span>
             </div>
             <DeleteModal
@@ -493,29 +489,40 @@ const PointOfSale = () => {
             />
             <CRow className="flex-grow-1 overflow-hidden">
                 <CCol className="d-flex flex-column h-100 pe-0">
-                    <CFormInput
-                        ref={inputRef}
-                        className="rounded-0 py-3 border-0 border-bottom"
-                        type="search"
-                        placeholder="Search product by name or barcode"
-                        aria-label="Search"
-                        value={searchQuery}
-                        onChange={handleSearchInput}
-                        autoFocus
-                        onFocus={(event) => {
-                            event.target.select()
-                            event.target.setSelectionRange(0, event.target.value.length)
-                        }}
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter') {
-                                handleSearch(event)
-                                if (!event.target.value.includes(' ')) {
-                                    event.target.value = ''
-                                    setSearchQuery('')
+                    <div className="d-flex align-items-center">
+                        <CFormInput
+                            ref={inputRef}
+                            className="rounded-0 py-3 border-0 border-bottom"
+                            type="search"
+                            placeholder="Search product by name or barcode"
+                            aria-label="Search"
+                            value={searchQuery}
+                            onChange={handleSearchInput}
+                            autoFocus
+                            onFocus={(event) => {
+                                event.target.select()
+                                event.target.setSelectionRange(0, event.target.value.length)
+                            }}
+                            onKeyDown={(event) => {
+                                if (event.key === 'Enter') {
+                                    handleSearch(event)
+                                    if (!event.target.value.includes(' ')) {
+                                        event.target.value = ''
+                                        setSearchQuery('')
+                                    }
                                 }
-                            }
-                        }}
-                    />
+                            }}
+                            style={{ flex: 1 }}
+                        />
+                        <CButton
+                            className="ms-2 d-flex d-lg-none align-items-center"
+                            onClick={() => setShowRightPaneMobile(true)}
+                            title="Open menu"
+                        >
+                            <FontAwesomeIcon icon={faBars} />
+                        </CButton>
+                    </div>
+
                     <div className="flex-grow-1 overflow-auto" style={{ minHeight: 0 }}>
                         <CTable hover responsive>
                             <CTableHead>
@@ -627,10 +634,11 @@ const PointOfSale = () => {
                         </CTable>
                     </div>
                 </CCol>
+
                 <CCol
                     lg={5}
                     xl={3}
-                    className="d-flex flex-column border-start border-2 border-secondary h-100"
+                    className="d-none d-lg-flex flex-column border-start border-2 border-secondary h-100"
                 >
                     {!showMenu ? (
                         <Controls
@@ -669,6 +677,86 @@ const PointOfSale = () => {
                     )}
                 </CCol>
             </CRow>
+
+            {showRightPaneMobile && (
+                <div
+                    className="right-pane-mobile-backdrop"
+                    style={{
+                        position: 'fixed',
+                        inset: 0,
+                        background: 'rgba(0,0,0,0.45)',
+                        zIndex: 1050,
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                    }}
+                    onClick={() => setShowRightPaneMobile(false)}
+                >
+                    <div
+                        className="right-pane-mobile"
+                        style={{
+                            width: '86%',
+                            maxWidth: 420,
+                            height: '100vh',
+                            background: 'var(--cui-body)',
+                            boxShadow: '-6px 0 24px rgba(0,0,0,0.2)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div
+                            className="d-flex align-items-center justify-content-between p-2 border-bottom"
+                            style={{ gap: 8 }}
+                        >
+                            <div className="text-uppercase">Menu</div>
+                            <CButton
+                                size="sm"
+                                color="light"
+                                onClick={() => setShowRightPaneMobile(false)}
+                            >
+                                Close
+                            </CButton>
+                        </div>
+                        <div style={{ overflow: 'auto', flex: 1, padding: 8 }} className="d-lg-flex flex-column h-100">
+                            {!showMenu ? (
+                                <Controls
+                                    data={{
+                                        handleDelete,
+                                        handleQuantity,
+                                        handleNewSale,
+                                        handleDiscount,
+                                        handleSalesLock,
+                                        handlePayment,
+                                        salesLock,
+                                        selectedProduct,
+                                        showMenu,
+                                        setShowMenu,
+                                        discount,
+                                        getDiscount,
+                                        paymentMethod,
+                                        setPaymentMethod,
+                                        setShowCalendarModal,
+                                        getSubTotal,
+                                        getTotalTaxes,
+                                        getTotal,
+                                    }}
+                                />
+                            ) : (
+                                <Menu
+                                    data={{
+                                        showMenu,
+                                        setShowMenu,
+                                        popupMenu,
+                                        setPopupMenu,
+                                        showPopupMenu,
+                                        setShowPopupMenu,
+                                    }}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

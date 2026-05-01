@@ -21,10 +21,10 @@ class AuthController extends ApiController
     {
         $validated = $request->validated();
 
-        $login = $validated['login'];
+        $email = $validated['email'];
         $password = $validated['password'];
 
-        if (Auth::attempt(['email' => $login, 'password' => $password])) {
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $request->session()->regenerate();
             $sessionToken = $request->session()->getId();
 

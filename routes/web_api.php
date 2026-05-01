@@ -10,7 +10,7 @@ use App\Http\Controllers\LogController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\SalesLockController;
-use App\Http\Controllers\Cashier\PosController;
+use App\Http\Controllers\POS\PosController;
 use App\Http\Controllers\UserController;
 
 Route::prefix('auth')->group(function () {
@@ -33,7 +33,7 @@ Route::middleware(['verify.session:cashier'])->group(function () {
 /*
  * Admin and Super Admin routes
  */
-Route::middleware(['verify.session:admin,super_admin'])->group(function () {
+Route::middleware(['verify.session:admin,'])->group(function () {
     Route::apiResource('/categories', CategoryController::class);
     Route::apiResource('/products', ProductController::class);
     Route::apiResource('/users', UserController::class);

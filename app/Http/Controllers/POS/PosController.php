@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Cashier;
+namespace App\Http\Controllers\POS;
 
 use App\Http\Controllers\ApiController;
-use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class PosController extends ApiController
 {
@@ -14,11 +14,24 @@ class PosController extends ApiController
      *
      * @return JsonResponse The JSON response containing the paginated list of categories and products.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $categories = Category::paginate(20);
+        $query = Product::query();
 
-        return $this->success($categories, 'Categories retrieved successfully.');
+        if ($request->has('search')) {
+            $input = $request->input('search');
+
+            $query->where(function ($q) use ($input) {
+                $q->where('name', 'LIKE', "%{$input}%")
+                    ->orWhere('code', 'LIKE', "%{$input}%")
+                    ->orWhere('barcode', 'LIKE', "%{$input}%")
+                    ->orWhere('description', 'LIKE', "%{$input}%");
+            });
+        }
+
+        $products = $query->latest()->paginate(20);
+
+        return $this->success($products, 'Products retrieved successfully');
     }
 
     /**

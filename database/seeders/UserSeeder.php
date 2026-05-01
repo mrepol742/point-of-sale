@@ -32,7 +32,6 @@ class UserSeeder extends Seeder
             User::factory()->create([
                 'email' => $user['email'],
                 'status' => 'active',
-                'username' => $user['role'],
                 'role' => $user['role'],
                 'password' => bcrypt($user['role']),
             ]);

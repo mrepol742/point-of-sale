@@ -75,10 +75,10 @@ const Menu = ({ data }) => {
                     className="rounded-pill bg-primary d-flex align-items-center justify-content-center fs-2"
                     style={{ width: '80px', height: '80px', color: 'white' }}
                 >
-                    {getInitials(user.name)}
+                    {getInitials(user.first_name)}
                 </div>
-                <h2 className="mt-2 mb-0">{user.name}</h2>
-                <p className="mb-0">{user.username}</p>
+                <h2 className="mt-2 mb-0">{user.first_name}</h2>
+                <p className="mb-0">@{user.username}</p>
             </div>
             <CNavbarNav>
                 {route.map((item, index) => (
