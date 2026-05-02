@@ -26,7 +26,6 @@ class StoreUserRequest extends FormRequest
             'last_name' => 'required|string|max:125',
             'prefix' => 'required|string|max:10',
             'suffix' => 'required|string|max:10',
-            'username' => 'required|string|max:30|unique:users,username',
             'password' => 'required|string|min:6',
             'email' => 'email|max:255|unique:users,email',
             'gender' => 'nullable|string|in:male,female,other',

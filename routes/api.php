@@ -13,16 +13,19 @@ use App\Http\Controllers\SalesLockController;
 use App\Http\Controllers\POS\PosController;
 use App\Http\Controllers\UserController;
 
-Route::prefix('auth')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/verify-session', [AuthController::class, 'verifySession']);
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/verify-session', [AuthController::class, 'verifySession']);
+        Route::get('/logout', [AuthController::class, 'logout']);
+    });
 });
 
 /*
  * Cashier routes
  */
-Route::middleware(['verify.session:cashier'])->group(function () {
+Route::middleware(['auth:sanctum', 'verify.session:cashier'])->group(function () {
     Route::apiResource('/pos', PosController::class);
     Route::apiResource('/sales-lock', SalesLockController::class);
 
@@ -33,7 +36,7 @@ Route::middleware(['verify.session:cashier'])->group(function () {
 /*
  * Admin and Super Admin routes
  */
-Route::middleware(['verify.session:admin,'])->group(function () {
+Route::middleware(['auth:sanctum', 'verify.session:admin'])->group(function () {
     Route::apiResource('/categories', CategoryController::class);
     Route::apiResource('/products', ProductController::class);
     Route::apiResource('/users', UserController::class);
@@ -54,4 +57,9 @@ Route::middleware(['verify.session:admin,'])->group(function () {
         Route::get('/daily-sales', [DashboardController::class, 'getDailySales']);
         Route::get('/latest-transactions', [DashboardController::class, 'getLatestTransactions']);
     });
+});
+
+// for health check
+Route::get('/up', function () {
+    return response()->json(['status' => 'ok']);
 });

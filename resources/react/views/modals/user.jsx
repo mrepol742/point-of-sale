@@ -48,7 +48,6 @@ const NewUser = ({ user, setUser, onCancel, fetchUsers, setShowAppModal }) => {
                         last_name: '',
                         prefix: '',
                         suffix: '',
-                        username: '',
                         password: '',
                         email: '',
                         gender: '',
@@ -76,7 +75,6 @@ const NewUser = ({ user, setUser, onCancel, fetchUsers, setShowAppModal }) => {
                     last_name: '',
                     prefix: '',
                     suffix: '',
-                    username: '',
                     password: '',
                     email: '',
                     gender: '',
@@ -188,34 +186,20 @@ const NewUser = ({ user, setUser, onCancel, fetchUsers, setShowAppModal }) => {
                 </CCol>
             </CRow>
             <CRow>
-                <CCol xs={12} md={6}>
-                    <CFormInput
-                        type="text"
-                        id="username"
-                        floatingClassName="mb-3"
-                        floatingLabel="Username"
-                        onChange={handleChange}
-                        value={user.username}
-                        placeholder=""
-                        required
-                    />
-                </CCol>
-                <CCol xs={12} md={6}>
-                    <CFormSelect
-                        id="role"
-                        floatingClassName="mb-3"
-                        floatingLabel="Role"
-                        onChange={handleSelectChange}
-                        value={user.role}
-                        options={[
-                            { label: 'Select a role', value: '' },
-                            { label: 'Admin', value: 'admin' },
-                            { label: 'Cashier', value: 'cashier' },
-                            { label: 'Production', value: 'production' },
-                        ]}
-                        required
-                    />
-                </CCol>
+                <CFormSelect
+                    id="role"
+                    floatingClassName="mb-3"
+                    floatingLabel="Role"
+                    onChange={handleSelectChange}
+                    value={user.role}
+                    options={[
+                        { label: 'Select a role', value: '' },
+                        { label: 'Admin', value: 'admin' },
+                        { label: 'Cashier', value: 'cashier' },
+                        { label: 'Production', value: 'production' },
+                    ]}
+                    required
+                />
             </CRow>
             <CRow>
                 <CCol xs={12} md={6}>
@@ -269,7 +253,6 @@ NewUser.propTypes = {
         email: PropTypes.string,
         phone: PropTypes.string,
         address: PropTypes.string,
-        username: PropTypes.string,
         password: PropTypes.string,
         status: PropTypes.string,
         role: PropTypes.string,

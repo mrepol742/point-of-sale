@@ -78,7 +78,6 @@ const Menu = ({ data }) => {
                     {getInitials(user.first_name)}
                 </div>
                 <h2 className="mt-2 mb-0">{user.first_name}</h2>
-                <p className="mb-0">@{user.username}</p>
             </div>
             <CNavbarNav>
                 {route.map((item, index) => (

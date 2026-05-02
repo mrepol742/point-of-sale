@@ -8,11 +8,11 @@ const ProductsLazy = lazy(() => import('../views/products'))
 
 const DefaultLayout = () => {
     const user = useSelector((state) => state.user)
-    const session_id = useSelector((state) => state.session_id)
+    const auth_token = useSelector((state) => state.auth_token)
 
     if (!user)
         return (
-            <div className={`loading-overlay ${session_id ? '' : 'bg-dark'}`}>
+            <div className={`loading-overlay ${auth_token ? '' : 'bg-dark'}`}>
                 <CSpinner color="primary" variant="grow" />
             </div>
         )

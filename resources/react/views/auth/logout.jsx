@@ -3,7 +3,7 @@ import cookies from 'js-cookie'
 
 const Logout = () => {
     useEffect(() => {
-        cookies.remove('session_id')
+        cookies.remove('auth_token')
         window.location.href = '/'
     }, [])
 

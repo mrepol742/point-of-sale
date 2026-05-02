@@ -2,6 +2,5 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/{any}', function () {
-    return view('index');
-})->where('any', '^(?!api).*$');
+Route::get('/', fn() => view('index'));
+Route::fallback(fn() => view('index'));

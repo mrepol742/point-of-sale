@@ -43,7 +43,7 @@ const Login = () => {
                 if (res.data.error) {
                     return reject(res.data.error)
                 }
-                cookies.set('session_id', res.data.data, { expires: 1 })
+                cookies.set('auth_token', res.data.data, { expires: 7 })
                 setTimeout(() => {
                     window.location.href = '/'
                 }, 1000)

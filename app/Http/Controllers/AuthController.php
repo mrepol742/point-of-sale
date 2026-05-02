@@ -5,16 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use App\Http\Requests\LoginAuthRequest;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends ApiController
 {
     /**
      * Handle login request and return a session token.
      *
-     * @param LoginAuthRequest $request The validated login request containing 'login' and 'password'.
+     * @param LoginAuthRequest $request The validated login request containing 'email' and 'password'.
      * @return JsonResponse A JSON response containing the session token if login is successful, or an error message if it fails.
      */
     public function login(LoginAuthRequest $request): JsonResponse
@@ -24,29 +23,30 @@ class AuthController extends ApiController
         $email = $validated['email'];
         $password = $validated['password'];
 
-        if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            $request->session()->regenerate();
-            $sessionToken = $request->session()->getId();
+        $user = User::where('email', $email)->first();
 
-            return $this->success($sessionToken, 'Login successful');
+        if (!$user || !Hash::check($password, $user->password)) {
+            return $this->error('Invalid credentials', 401);
         }
 
-        return $this->error('Invalid credentials', 401);
+        $sessionToken = $user->createToken('auth_token')->plainTextToken;
+
+        return $this->success($sessionToken, 'Login successful');
     }
 
     /**
      * Handle login request and return a session token.
      *
-     * @param Request $request The request containing the 'session_id' to verify.
+     * @param Request $request The request containing the 'auth_token' to verify.
      * @return JsonResponse A JSON response indicating whether the session is active and valid, along with user data if successful, or an error message if it fails.
      */
     public function verifySession(Request $request): JsonResponse
     {
-        $sessionId = $request->input('session_id');
+        $user = $request->user();
 
-        if (Session::getId() === $sessionId && Auth::check() && Auth::user()->status === 'active') {
-            $user = Auth::user();
+        info('Session verification attempted for user ID: ' . ($user ? $user->id : 'null'));
 
+        if ($user) {
             return $this->success($user, 'Session is active and valid');
         }
 
@@ -61,10 +61,12 @@ class AuthController extends ApiController
      */
     public function logout(Request $request): JsonResponse
     {
-        Auth::logout();
+        $user = $request->user();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($user) {
+            // delete ONLY current token
+            $user->currentAccessToken()->delete();
+        }
 
         return $this->success(null, 'Logout successful');
     }

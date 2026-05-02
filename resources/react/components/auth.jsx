@@ -10,7 +10,7 @@ const AppAuth = () => {
     const dispatch = useDispatch()
     const user = useSelector((state) => state.user)
     const navigate = useNavigate()
-    const session_id = cookies.get('session_id')
+    const auth_token = cookies.get('auth_token')
     const [isAuth, setIsAuth] = useState(null)
 
     let loc = `/login`
@@ -18,15 +18,15 @@ const AppAuth = () => {
         loc = `/login?n=${window.location.pathname}${window.location.search}`
 
     const verify = async () => {
-        if (!session_id) return setIsAuth(false)
+        if (!auth_token) return setIsAuth(false)
         if (user && Object.keys(user).length > 0) return setIsAuth(true)
 
         try {
-            const response = await axiosInstance.post('/auth/verify-session', { session_id })
+            const response = await axiosInstance.get('/auth/verify-session')
             dispatch({ type: 'SET_USER', payload: response.data.data })
             setIsAuth(true)
         } catch (error) {
-            cookies.remove('session_id')
+            cookies.remove('auth_token')
             window.location.href = loc
         }
     }
@@ -37,7 +37,7 @@ const AppAuth = () => {
 
     if (isAuth === null)
         return (
-            <div className={`${session_id ? '' : 'bg-dark'} text-center p-3`}>
+            <div className={`${auth_token ? '' : 'bg-dark'} text-center p-3`}>
                 <CSpinner color="primary" variant="grow" />
             </div>
         )

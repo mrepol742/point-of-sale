@@ -27,14 +27,14 @@ class UpdateUserRequest extends FormRequest
         return [
             'first_name' => 'sometimes|required|string|max:125',
             'last_name' => 'sometimes|required|string|max:125',
-            'prefix' => 'nullable|string|max:125',
-            'suffix' => 'nullable|string|max:125',
-            'username' => 'sometimes|required|string|max:255|unique:users,username,' . $userId,
+            'prefix' => 'required|string|max:10',
+            'suffix' => 'required|string|max:10',
             'email' => 'sometimes|required|email|max:255|unique:users,email,' . $userId,
+            'gender' => 'nullable|string|in:male,female,other',
             'phone_number' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:255',
-            'role' => 'sometimes|required|string|exists:roles,name',
-            'status' => 'sometimes|required|string|in:active,inactive',
+            'role' => 'required|string|in:admin,cashier,production',
+            'status' => 'required|string|in:active,inactive,suspended',
         ];
     }
 }

@@ -6,7 +6,9 @@ import 'core-js'
 import App from './app'
 import store from './store'
 
-createRoot(document.getElementById('root')).render(
+const div = document.createElement('div')
+document.body.appendChild(div)
+createRoot(div).render(
     <Provider store={store}>
         <App />
     </Provider>,

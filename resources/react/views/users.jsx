@@ -28,7 +28,6 @@ const Users = () => {
         last_name: '',
         prefix: '',
         suffix: '',
-        username: '',
         password: '',
         email: '',
         gender: '',
@@ -80,7 +79,6 @@ const Users = () => {
             last_name: '',
             prefix: '',
             suffix: '',
-            username: '',
             password: '',
             email: '',
             gender: '',
@@ -166,7 +164,6 @@ const Users = () => {
                                     Last Name
                                 </CTableHeaderCell>
                                 <CTableHeaderCell scope="col">Suffix</CTableHeaderCell>
-                                <CTableHeaderCell scope="col">Username</CTableHeaderCell>
                                 <CTableHeaderCell scope="col">Gender</CTableHeaderCell>
                                 <CTableHeaderCell scope="col">Birthdate</CTableHeaderCell>
                                 <CTableHeaderCell scope="col">Role</CTableHeaderCell>
@@ -186,7 +183,6 @@ const Users = () => {
                                     <CTableDataCell>{user.first_name}</CTableDataCell>
                                     <CTableDataCell>{user.last_name}</CTableDataCell>
                                     <CTableDataCell>{user.suffix}</CTableDataCell>
-                                    <CTableDataCell>{user.username}</CTableDataCell>
                                     <CTableDataCell>{user.gender}</CTableDataCell>
                                     <CTableDataCell>{user.date_of_birth}</CTableDataCell>
                                     <CTableDataCell>{user.role}</CTableDataCell>
