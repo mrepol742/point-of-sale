@@ -15,14 +15,15 @@ return new class extends Migration {
             $table->ulid('ulid')->unique();
 
             $table->string('first_name', 125);
+            $table->string('middle_name', 125)->nullable();
             $table->string('last_name', 125);
-            $table->string('prefix', 10)->nullable();
+            $table->enum('prefix', ['mr', 'mrs', 'ms', 'dr']);
             $table->string('suffix', 10)->nullable();
             $table->string('email')->unique();
-            $table->string('phone_number')->nullable();
-            $table->date('date_of_birth')->nullable();
-            $table->string('address')->nullable();
-            $table->enum('gender', ['male', 'female', 'other'])->nullable();
+            $table->string('phone_number');
+            $table->date('date_of_birth');
+            $table->string('address');
+            $table->enum('gender', ['male', 'female', 'other']);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['admin', 'cashier', 'production'])->default('cashier');

@@ -23,12 +23,11 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:255',
-            'barcode' => 'nullable|string|max:255',
+            'code' => 'nullable|string|max:255|unique:products,code',
+            'barcode' => 'nullable|string|max:255|unique:products,barcode',
             'unit_measurement' => 'required|string|max:255',
-            'is_active' => 'sometimes|boolean',
-            'default_quantity' => 'required|boolean',
-            'category_ulid' => 'nullable|string|exists:categories,ulid,deleted_at,NULL',
+            'quantity' => 'nullable|integer|min:0',
+            'category_ulid' => 'required|string|exists:categories,ulid,deleted_at,NULL',
             'age_restriction' => 'nullable|integer|min:0',
             'description' => 'nullable|string',
             'taxes' => 'nullable|integer|min:0',

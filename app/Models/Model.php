@@ -38,4 +38,14 @@ class Model extends EloquentModel
     {
         return array_unique(array_merge(parent::getHidden(), $this->hidden));
     }
+
+    /**
+     * Get the route key name for Laravel route model binding.
+     *
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
+    }
 }

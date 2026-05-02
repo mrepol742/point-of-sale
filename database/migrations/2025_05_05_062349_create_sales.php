@@ -32,7 +32,7 @@ return new class extends Migration {
 
         Schema::create('sales_locks', function (Blueprint $table) {
             $table->id();
-            $table->foreignUlid('cashier_ulid')->constrained('users', 'ulid');
+            $table->foreignUlid('cashier_ulid')->constrained('users', 'ulid')->restrictOnDelete();
 
             $table->json('products');
 

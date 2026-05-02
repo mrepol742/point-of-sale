@@ -21,17 +21,25 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        $product = $this->route('product');
-        $productId = is_object($product) ? $product->getKey() : $product;
+     //   $productUlid = $this->route('product')?->ulid;
 
         return [
             'name' => 'sometimes|required|string|max:255',
-            'code' => 'sometimes|required|string|max:255|unique:products,code, ' . $productId,
-            'barcode' => 'nullable|string|max:255|unique:products,barcode,' . $productId,
+            // 'code' => [
+            //     'nullable',
+            //     'string',
+            //     'max:255',
+            //     'unique:products,code,' . $productUlid . ',ulid,deleted_at,NULL',
+            // ],
+            // 'barcode' => [
+            //     'nullable',
+            //     'string',
+            //     'max:255',
+            //     'unique:products,barcode,' . $productUlid . ',ulid,deleted_at,NULL',
+            // ],
             'unit_measurement' => 'sometimes|required|string|max:255',
-            'is_active' => 'sometimes|boolean',
-            'default_quantity' => 'sometimes|boolean',
-            'category_ulid' => 'nullable|integer|exists:categories,ulid,deleted_at,NULL',
+            'quantity' => 'nullable|integer|min:0',
+            // 'category_ulid' => 'required|integer|exists:categories,ulid,deleted_at,NULL',
             'age_restriction' => 'nullable|integer|min:0',
             'description' => 'nullable|string',
             'taxes' => 'nullable|integer|min:0',

@@ -34,7 +34,7 @@ Route::middleware(['auth:sanctum', 'verify.session:cashier'])->group(function ()
 });
 
 /*
- * Admin and Super Admin routes
+ * Admin routes
  */
 Route::middleware(['auth:sanctum', 'verify.session:admin'])->group(function () {
     Route::apiResource('/categories', CategoryController::class);

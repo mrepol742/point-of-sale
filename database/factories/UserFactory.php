@@ -25,9 +25,17 @@ class UserFactory extends Factory
     {
         return [
             'first_name' => $this->faker->firstName(),
+            'middle_name' => $this->faker->randomElement([$this->faker->firstName(), null]),
             'last_name' => $this->faker->lastName(),
-            'prefix' => $this->faker->randomElement(['Dr.', 'Mr.', 'Mrs.', 'Ms.']),
-            'suffix' => $this->faker->randomElement(['Jr.', 'Sr.', 'II', 'III']),
+            'prefix' => $this->faker->randomElement(['mr', 'mrs', 'ms', 'dr']),
+            'suffix' => $this->faker->randomElement([
+                $this->faker->randomElement(['jr', 'sr', 'iii', 'phd']),
+                null,
+            ]),
+            'gender' => $this->faker->randomElement(['male', 'female', 'other']),
+            'date_of_birth' => $this->faker->date(),
+            'address' => $this->faker->address(),
+            'phone_number' => $this->faker->phoneNumber(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'role' => $this->faker->randomElement(['admin', 'cashier', 'production']),

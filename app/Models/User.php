@@ -20,7 +20,9 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'user_ulid',
         'first_name',
+        'middle_name',
         'last_name',
         'prefix',
         'suffix',
@@ -104,5 +106,15 @@ class User extends Authenticatable
     public function isProduction(): bool
     {
         return $this->role === 'production';
+    }
+
+    /**
+     * Get the route key name for Laravel route model binding.
+     *
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'ulid';
     }
 }

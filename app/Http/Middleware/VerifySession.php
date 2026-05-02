@@ -4,27 +4,30 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
 
 class VerifySession
 {
     /**
-     * Handle an incoming request.
+     * Handle role and status verification for incoming requests.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param Request $request The incoming HTTP request.
+     * @param Closure $next The next middleware or request handler.
+     * @param mixed ...$roles The roles that are allowed to access the resource.
+     * @return mixed The response from the next middleware or request handler, or a JSON response with a 403 status code if access is forbidden.
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        if (Auth::check()) {
-            $user = Auth::user();
+        $user = $request->user();
 
-            if (!empty($roles) && in_array($user->role, $roles) && $user->status === 'active')
-                return $next($request);
-
-            return response()->json(['message' => 'Forbidden'], 403);
+        if (
+            $user &&
+            !empty($roles) &&
+            in_array($user->role, $roles) &&
+            $user->status === 'active'
+        ) {
+            return $next($request);
         }
 
-        return response()->json(['message' => 'Please login to continue'], 401);
+        return response()->json(['message' => 'Forbidden'], 403);
     }
 }

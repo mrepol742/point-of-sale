@@ -179,17 +179,17 @@ const Users = () => {
                         <CTableBody>
                             {users.map((user, index) => (
                                 <CTableRow key={user.id}>
-                                    <CTableDataCell>{user.prefix}</CTableDataCell>
+                                    <CTableDataCell className="text-capitalize">{user.prefix}.</CTableDataCell>
                                     <CTableDataCell>{user.first_name}</CTableDataCell>
                                     <CTableDataCell>{user.last_name}</CTableDataCell>
-                                    <CTableDataCell>{user.suffix}</CTableDataCell>
-                                    <CTableDataCell>{user.gender}</CTableDataCell>
+                                    <CTableDataCell className="text-capitalize">{user.suffix}.</CTableDataCell>
+                                    <CTableDataCell className="text-capitalize">{user.gender}</CTableDataCell>
                                     <CTableDataCell>{user.date_of_birth}</CTableDataCell>
-                                    <CTableDataCell>{user.role}</CTableDataCell>
+                                    <CTableDataCell className="text-capitalize">{user.role}</CTableDataCell>
                                     <CTableDataCell>{user.email}</CTableDataCell>
                                     <CTableDataCell>{user.phone_number}</CTableDataCell>
                                     <CTableDataCell>{user.address}</CTableDataCell>
-                                    <CTableDataCell>{user.status}</CTableDataCell>
+                                    <CTableDataCell className="text-capitalize">{user.status}</CTableDataCell>
                                     <CTableDataCell>
                                         <div className="d-flex">
                                             <CButton

@@ -17,10 +17,6 @@ class DatabaseSeeder extends Seeder
             return;
         }
 
-        $this->call([
-            CategorySeeder::class,
-            ProductSeeder::class,
-            UserSeeder::class,
-        ]);
+        $this->call([UserSeeder::class, CategorySeeder::class, ProductSeeder::class]);
     }
 }

@@ -24,13 +24,15 @@ const Products = () => {
     const navigate = useNavigate()
     const [products, setProducts] = useState([])
     const [product, setProduct] = useState({
+        ulid: 0,
+        user_ulid: 0,
         name: '',
         code: '',
         barcode: '',
         unit_measurement: '',
         category_ulid: 0,
         is_active: true,
-        default_quantity: true,
+        quantity: 0,
         age_restriction: 0,
         description: '',
         taxes: 0,
@@ -81,13 +83,15 @@ const Products = () => {
 
     const handleAdd = () => {
         setProduct({
+            ulid: 0,
+            user_ulid: 0,
             name: '',
             code: '',
             barcode: '',
             unit_measurement: '',
             category_ulid: 0,
             is_active: true,
-            default_quantity: true,
+            quantity: 0,
             age_restriction: 0,
             description: '',
             taxes: 0,
@@ -186,6 +190,9 @@ const Products = () => {
                                 </CTableHeaderCell>
                                 <CTableHeaderCell scope="col">Stock</CTableHeaderCell>
                                 <CTableHeaderCell scope="col">Category</CTableHeaderCell>
+                                <CTableHeaderCell scope="col" className="text-nowrap">
+                                    Added By
+                                </CTableHeaderCell>
                                 <CTableHeaderCell scope="col"></CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
@@ -202,6 +209,7 @@ const Products = () => {
                                         {product.is_active ? 'Yes' : 'No'}
                                     </CTableDataCell>
                                     <CTableDataCell>{product.category?.name ?? ''}</CTableDataCell>
+                                    <CTableDataCell>{product.user?.email ?? ''}</CTableDataCell>
                                     <CTableDataCell>
                                         <div className="d-flex">
                                             <CButton

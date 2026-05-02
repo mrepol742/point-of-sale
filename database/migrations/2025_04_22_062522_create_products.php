@@ -24,6 +24,7 @@ return new class extends Migration {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->ulid('ulid')->unique();
+            $table->foreignUlid('user_ulid')->constrained('users', 'ulid');
 
             $table->string('name');
             $table->string('code')->unique()->nullable();
@@ -31,7 +32,10 @@ return new class extends Migration {
             $table->string('unit_measurement');
             $table->boolean('is_active')->default(true);
             $table->integer('quantity')->default(0);
-            $table->foreignUlid('category_ulid')->constrained('categories', 'ulid');
+            $table
+                ->foreignUlid('category_ulid')
+                ->constrained('categories', 'ulid')
+                ->restrictOnDelete();
             $table->integer('age_restriction')->nullable();
             $table->text('description')->nullable();
             $table->double('taxes')->default(0);

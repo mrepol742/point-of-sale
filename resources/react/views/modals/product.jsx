@@ -19,6 +19,25 @@ import axiosInstance from '../../services/axios'
 
 const Product = ({ product, setProduct, onCancel, fetchProducts, setShowAppModal }) => {
     const [categories, setCategories] = useState([])
+    const emptyProduct = {
+        ulid: '',
+        name: '',
+        code: '',
+        barcode: '',
+        unit_measurement: '',
+        category_ulid: 0,
+        is_active: true,
+        quantity: 0,
+        age_restriction: 0,
+        description: '',
+        taxes: 0,
+        cost_price: 0,
+        markup: 0,
+        sale_price: 0,
+        color: '',
+        image: null,
+        type: 'add',
+    }
 
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -51,24 +70,7 @@ const Product = ({ product, setProduct, onCancel, fetchProducts, setShowAppModal
                 .post('/products', product)
                 .then((response) => {
                     toast.success(`${product.name} created successfully`)
-                    setProduct({
-                        name: '',
-                        code: '',
-                        barcode: '',
-                        unit_measurement: '',
-                        category_ulid: 0,
-                        is_active: true,
-                        default_quantity: true,
-                        age_restriction: 0,
-                        description: '',
-                        taxes: 0,
-                        cost_price: 0,
-                        markup: 0,
-                        sale_price: 0,
-                        color: '',
-                        image: null,
-                        type: 'add',
-                    })
+                    setProduct(emptyProduct)
                     if (typeof fetchProducts === 'function') fetchProducts(1)
                     if (typeof setShowAppModal === 'function') setShowAppModal(false)
                 })
@@ -78,27 +80,10 @@ const Product = ({ product, setProduct, onCancel, fetchProducts, setShowAppModal
                 })
 
         axiosInstance
-            .patch(`/products/${product.id}`, product)
+            .patch(`/products/${product.ulid}`, product)
             .then((response) => {
                 toast.success(`${product.name} updated successfully`)
-                setProduct({
-                    name: '',
-                    code: '',
-                    barcode: '',
-                    unit_measurement: '',
-                    category_ulid: 0,
-                    is_active: true,
-                    default_quantity: true,
-                    age_restriction: 0,
-                    description: '',
-                    taxes: 0,
-                    cost_price: 0,
-                    markup: 0,
-                    sale_price: 0,
-                    color: '',
-                    image: null,
-                    type: 'add',
-                })
+                setProduct(emptyProduct)
                 if (typeof fetchProducts === 'function') fetchProducts(1)
                 if (typeof setShowAppModal === 'function') setShowAppModal(false)
             })
@@ -207,29 +192,31 @@ const Product = ({ product, setProduct, onCancel, fetchProducts, setShowAppModal
                     />
                 </CCol>
             </CRow>
-            <CFormSwitch
-                onChange={handleSwitchChange}
-                label="Active"
-                id="is_active"
-                checked={product.is_active}
-                defaultChecked
-            />
-            <CFormSwitch
-                onChange={handleSwitchChange}
-                label="Default Quantity"
-                id="default_quantity"
-                checked={product.default_quantity}
-                defaultChecked
-            />
-            <CFormInput
-                type="number"
-                id="age_restriction"
-                floatingClassName="mb-3"
-                floatingLabel="Age Restriction"
-                onChange={handleChange}
-                value={product.age_restriction}
-                placeholder=""
-            />
+
+            <CRow>
+                <CCol xs={12} md={6}>
+                    <CFormInput
+                        type="number"
+                        id="quantity"
+                        floatingClassName="mb-3"
+                        floatingLabel="Quantity"
+                        onChange={handleChange}
+                        value={product.quantity}
+                        placeholder=""
+                    />
+                </CCol>
+                <CCol xs={12} md={6}>
+                    <CFormInput
+                        type="number"
+                        id="age_restriction"
+                        floatingClassName="mb-3"
+                        floatingLabel="Age Restriction"
+                        onChange={handleChange}
+                        value={product.age_restriction}
+                        placeholder=""
+                    />
+                </CCol>
+            </CRow>
             <CFormInput
                 type="text"
                 id="description"
@@ -239,6 +226,7 @@ const Product = ({ product, setProduct, onCancel, fetchProducts, setShowAppModal
                 value={product.description}
                 placeholder=""
             />
+
             <h5>Price</h5>
             <CRow>
                 <CCol xs={12} md={6}>

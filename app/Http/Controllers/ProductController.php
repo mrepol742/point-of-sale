@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\Sale;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends ApiController
 {
@@ -21,7 +20,7 @@ class ProductController extends ApiController
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Product::query();
+        $query = Product::query()->with(['user', 'category']);
 
         if ($request->has('search')) {
             $input = $request->input('search');
@@ -48,32 +47,50 @@ class ProductController extends ApiController
     public function store(StoreProductRequest $request): JsonResponse
     {
         $validated = $request->validated();
+        $validated['user_ulid'] = auth()->user()->ulid;
 
-        if ($validated['default_quantity']) {
-            $validated['quantity'] = 0;
-        } else {
-            $validated['quantity'] = $validated->input('quantity', 0);
-        }
+        $imagePath = null;
 
-        if (is_null($validated['barcode'])) {
-            $lastProduct = Product::orderBy('id', 'desc')->firstOrFail();
-            if ($lastProduct && $lastProduct->barcode) {
-                $lastBarcode = ltrim($lastProduct->barcode, '0');
-                $nextBarcode = str_pad((int) $lastBarcode + 1, 9, '0', STR_PAD_LEFT);
-            } else {
-                $nextBarcode = '0000000000001';
+        DB::beginTransaction();
+
+        try {
+            // Generate barcode if missing
+            if (is_null($validated['barcode'])) {
+                $lastProduct = Product::orderBy('id', 'desc')->first();
+
+                if ($lastProduct && $lastProduct->barcode) {
+                    $lastBarcode = ltrim($lastProduct->barcode, '0');
+                    $nextBarcode = str_pad((int) $lastBarcode + 1, 9, '0', STR_PAD_LEFT);
+                } else {
+                    $nextBarcode = '000000001';
+                }
+
+                $validated['barcode'] = $nextBarcode;
             }
-            $validated['barcode'] = $nextBarcode;
+
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('product_images', 'public');
+                $validated['image'] = $imagePath;
+            }
+
+            $product = Product::create($validated);
+
+            DB::commit();
+
+            return $this->success($product, 'Product created successfully.', 201);
+        } catch (\Throwable $e) {
+            Log::error('Failed to create product: ' . $e->getMessage());
+
+            DB::rollBack();
+
+            // Clean up uploaded file if transaction fails
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
+
+            return $this->error('Failed to create product.', 500);
         }
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('product_images', 'public');
-            $validated['image'] = $imagePath;
-        }
-
-        $product = Product::create($validated);
-
-        return $this->success($product, 'Product created successfully.', 201);
     }
 
     /**
@@ -86,15 +103,39 @@ class ProductController extends ApiController
     public function update(UpdateProductRequest $request, Product $product): JsonResponse
     {
         $validated = $request->validated();
+        $imagePath = null;
+        $oldImage = $product->image;
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('product_images', 'public');
-            $validated['image'] = $imagePath;
+        DB::beginTransaction();
+
+        try {
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('product_images', 'public');
+                $validated['image'] = $imagePath;
+            }
+
+            $product->update($validated);
+
+            DB::commit();
+
+            // delete old image AFTER successful commit
+            if ($imagePath && $oldImage) {
+                Storage::disk('public')->delete($oldImage);
+            }
+
+            return $this->success($product, 'Product updated successfully.');
+        } catch (\Throwable $e) {
+            Log::error('Failed to update product: ' . $e->getMessage());
+
+            DB::rollBack();
+
+            // delete newly uploaded image if transaction failed
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
+
+            return $this->error('Failed to update product.', 500);
         }
-
-        $product->update($validated);
-
-        return $this->success($product, 'Product updated successfully.');
     }
 
     /**

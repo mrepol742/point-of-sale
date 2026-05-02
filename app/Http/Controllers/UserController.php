@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Support\Str;
 
 class UserController extends ApiController
 {
@@ -33,6 +31,8 @@ class UserController extends ApiController
     public function store(StoreUserRequest $request): JsonResponse
     {
         $validated = $request->validated();
+
+        $validated['password'] = Str::password(12);
 
         $user = User::create($validated);
 

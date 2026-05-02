@@ -26,13 +26,15 @@ class UpdateUserRequest extends FormRequest
 
         return [
             'first_name' => 'sometimes|required|string|max:125',
+            'middle_name' => 'nullable|string|max:125',
             'last_name' => 'sometimes|required|string|max:125',
-            'prefix' => 'required|string|max:10',
+            'prefix' => 'required|string|in:mr,mrs,ms,dr',
             'suffix' => 'required|string|max:10',
             'email' => 'sometimes|required|email|max:255|unique:users,email,' . $userId,
-            'gender' => 'nullable|string|in:male,female,other',
+            'gender' => 'sometimes|string|in:male,female,other',
             'phone_number' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:255',
+            'date_of_birth' => 'nullable|date|before:today',
             'role' => 'required|string|in:admin,cashier,production',
             'status' => 'required|string|in:active,inactive,suspended',
         ];

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
@@ -18,6 +19,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_ulid' => User::inRandomOrder()->value('ulid'),
             'name' => $this->faker->word(),
             'code' => $this->faker->unique()->regexify('[A-Z0-9]{10}'),
             'barcode' => $this->faker->unique()->regexify('[0-9]{12}'),

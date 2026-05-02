@@ -10,12 +10,13 @@ class Product extends Model
 {
     use SoftDeletes, HasFactory, Notifiable;
 
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
+        'user_ulid',
         'name',
         'code',
         'barcode',
@@ -32,6 +33,16 @@ class Product extends Model
         'color',
         'image',
     ];
+
+    /**
+     * Get the user that owns the product.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_ulid', 'ulid')
+            ->select(['ulid', 'first_name', 'last_name', 'email'])
+            ->withTrashed();
+    }
 
     /**
      * Get the category associated with the product.
